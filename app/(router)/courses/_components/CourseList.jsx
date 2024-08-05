@@ -122,40 +122,45 @@ function CourseList() {
     }
 
     return (
-        <Suspense fallback={<div>Loading courses...</div>}>
-            <div className='p-4 bg-white rounded-lg mt-5'>
-                <div className='flex flex-col sm:flex-row items-center justify-between'>
-                    <h2 className='text-[20px] font-bold text-primary mb-3 sm:mb-0'>All Courses</h2>
-                    <Select onValueChange={(value) => setFilter(value)}>
-                        <SelectTrigger className="w-full sm:w-[180px]">
-                            <SelectValue placeholder="Filter" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All</SelectItem>
-                            <SelectItem value="paid">Paid</SelectItem>
-                            <SelectItem value="free">Free</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                {/* Display an error message if no courses are found */}
-                {courseList.length === 0 ? (
-                    <div className='text-center mt-5 text-primary font-semibold'>
-                        No courses found.
-                    </div>
-                ) : (
-                    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5'>
-                        {courseList.map((item, index) => (
-                            <Link href={'/course-preview/' + item.slug} key={index}>
-                                <div>
-                                    <CourseItem course={item} />
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-                )}
+        <div className='p-4 bg-white rounded-lg mt-5'>
+            <div className='flex flex-col sm:flex-row items-center justify-between'>
+                <h2 className='text-[20px] font-bold text-primary mb-3 sm:mb-0'>All Courses</h2>
+                <Select onValueChange={(value) => setFilter(value)}>
+                    <SelectTrigger className="w-full sm:w-[180px]">
+                        <SelectValue placeholder="Filter" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All</SelectItem>
+                        <SelectItem value="paid">Paid</SelectItem>
+                        <SelectItem value="free">Free</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
-        </Suspense>
+            {/* Display an error message if no courses are found */}
+            {courseList.length === 0 ? (
+                <div className='text-center mt-5 text-primary font-semibold'>
+                    No courses found.
+                </div>
+            ) : (
+                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5'>
+                    {courseList.map((item, index) => (
+                        <Link href={'/course-preview/' + item.slug} key={index}>
+                            <div>
+                                <CourseItem course={item} />
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            )}
+        </div>
     );
 }
 
-export default CourseList;
+// Wrapping with Suspense in the parent component or the page
+export default function CoursesPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <CourseList />
+        </Suspense>
+    );
+}
